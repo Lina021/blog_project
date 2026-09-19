@@ -67,7 +67,7 @@
         <textarea name="comment" rows="3" class="w-full border rounded px-3 py-2 mb-2"
                   placeholder="Write a comment...">{{ old('comment') }}</textarea>
         @error('comment') <p class="text-red-600 text-sm mb-2">{{ $message }}</p> @enderror
-        <x-button>Post Comment</x-button>
+        <x-button>Submit Comment</x-button>
     </form>
 @else
     <p><a href="{{ route('login') }}" class="text-brand-dark underline">Log in</a> to leave a comment.</p>

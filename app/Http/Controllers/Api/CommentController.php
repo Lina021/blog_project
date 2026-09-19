@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Notifications\NewCommentNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -23,6 +24,10 @@ class CommentController extends Controller
             'user_id' => $request->user()->id,
             'comment' => $request->validated('comment'),
         ]);
+
+        if ($post->user_id !== $comment->user_id) {
+            $post->user->notify(new NewCommentNotification($comment));
+        }
 
         return (new CommentResource($comment->load('user')))
             ->response()

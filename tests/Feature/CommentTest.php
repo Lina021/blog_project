@@ -3,6 +3,9 @@
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
+use App\Notifications\NewCommentNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Notification;
 
 test('comments are shown on the post page', function () {
     $comment = Comment::factory()->create();
@@ -58,4 +61,25 @@ test('a user cannot delete another users comment', function () {
     $this->actingAs(User::factory()->create())->delete("/comments/{$comment->id}")->assertForbidden();
 
     $this->assertDatabaseHas('comments', ['id' => $comment->id]);
+});
+
+test('the post author is notified by queued mail when someone comments', function () {
+    Notification::fake();
+    $post = Post::factory()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->post("/posts/{$post->id}/comments", ['comment' => 'Nice post!']);
+
+    Notification::assertSentTo($post->user, NewCommentNotification::class, function ($notification) {
+        return $notification instanceof ShouldQueue && $notification->comment->comment === 'Nice post!';
+    });
+});
+
+test('the author is not notified about their own comment', function () {
+    Notification::fake();
+    $post = Post::factory()->create();
+
+    $this->actingAs($post->user)->post("/posts/{$post->id}/comments", ['comment' => 'Note to self']);
+
+    Notification::assertNothingSent();
 });
