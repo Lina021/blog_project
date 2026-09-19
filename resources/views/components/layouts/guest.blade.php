@@ -6,8 +6,9 @@
         <title>{{ $title ?? config('app.name', 'Laravel') }}</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="min-h-screen bg-gray-100 text-gray-900">
-        <main class="mx-auto flex min-h-screen max-w-md items-center px-6 py-12">
+    <body class="min-h-screen bg-page text-ink">
+        <main class="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
+            <a href="{{ route('posts.index') }}" class="mb-6 text-center text-lg font-bold">The Tech Blog</a>
             <section class="w-full rounded-lg bg-white p-8 shadow-sm">
                 {{ $slot }}
             </section>
