@@ -1,58 +1,94 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Blog Project
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A blog website for sharing tech topics, where users can register, publish posts with images and tags, and discuss them in comments. Visitors can browse, search and filter posts without an account. The project covers CRUD, authentication, authorization, a REST API, file uploads, email notifications and tests.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Posts**: create, edit, delete and view posts, each with an optional image
+- **Tags**: attach tags to posts
+- **Search and filter**: search by title, content or tag, and filter posts by tag
+- **Comments**: logged-in users can comment on posts and delete their own comments
+- **Email notifications**: the post author is notified when someone comments (queued)
+- **Authentication**: register, log in and log out
+- **Authorization**: policies make sure users can only edit or delete their own posts and comments
+- **My Activity**: a page showing the logged-in user's own posts and comments
+- **REST API**: token-based API (Laravel Sanctum) for posts, comments, tags and auth
+- **Tests**: feature tests written with Pest
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.4 and Laravel 13
+- MySQL
+- Blade templates, Tailwind CSS 4 and Vite
+- Laravel Sanctum for API authentication
+- Pest for testing
 
-## Learning Laravel
+## Setup
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```sh
+git clone https://github.com/Lina021/blog_project.git
+cd blog-project
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+composer install
+npm install
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+cp .env.example .env
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Set the database details in `.env`. The default in `.env.example` is SQLite. For MySQL, change `DB_CONNECTION` to `mysql` and fill in the `DB_*` values.
 
-## Contributing
+Then create the tables and link the storage folder for uploaded images:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```sh
+php artisan migrate --seed
+php artisan storage:link
+```
 
-## Code of Conduct
+Alternatively, import the sample data in [database/backup.sql](database/backup.sql) into a MySQL database called `blog`.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Running the app
 
-## Security Vulnerabilities
+```sh
+php artisan serve
+npm run dev
+php artisan queue:work
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+The queue worker is needed to send comment notification emails. Emails are written to the log (`MAIL_MAILER=log`) by default, so check `storage/logs/laravel.log`.
 
-## License
+## Web routes
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Method | URL | Description |
+|---|---|---|
+| GET | `/posts` | List posts (supports `?q=` search and `?tag=` filter) |
+| GET | `/posts/{post}` | Show a post |
+| GET/POST | `/posts/create`, `/posts` | Create a post (login required) |
+| GET/PUT | `/posts/{post}/edit`, `/posts/{post}` | Edit a post (owner only) |
+| DELETE | `/posts/{post}` | Delete a post (owner only) |
+| POST | `/posts/{post}/comments` | Add a comment |
+| DELETE | `/comments/{comment}` | Delete a comment (owner only) |
+| GET | `/my-activity` | Your posts and comments |
+
+## API
+
+All routes are under `/api`. Send the token as `Authorization: Bearer <token>`.
+
+| Method | URL | Auth |
+|---|---|---|
+| POST | `/register`, `/login` | No |
+| GET | `/posts`, `/posts/{post}`, `/posts/{post}/comments`, `/tags` | No |
+| GET | `/user` | Yes |
+| POST | `/logout` | Yes |
+| POST | `/posts` | Yes |
+| PUT/PATCH | `/posts/{post}` | Yes (owner) |
+| DELETE | `/posts/{post}` | Yes (owner) |
+| POST | `/posts/{post}/comments` | Yes |
+| DELETE | `/comments/{comment}` | Yes (owner) |
+
+## Running tests
+
+```sh
+php artisan test
+```
+
