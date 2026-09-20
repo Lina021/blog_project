@@ -8,15 +8,23 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        return PostResource::collection(Post::with('user', 'tags')->latest()->paginate(10));
+        return PostResource::collection(
+            Post::with('user', 'tags')
+                ->search($request->query('q'))
+                ->withTag($request->query('tag'))
+                ->latest()
+                ->paginate(10)
+                ->withQueryString()
+        );
     }
 
     public function store(StorePostRequest $request): JsonResponse

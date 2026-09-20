@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MyActivityController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
@@ -18,7 +18,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/my-activity', MyActivityController::class)->name('my-activity');
 
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });

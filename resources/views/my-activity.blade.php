@@ -1,7 +1,7 @@
-<x-layouts.layout title="Dashboard">
+<x-layouts.layout title="My Activity">
     <div class="mb-6">
         <p class="text-sm text-ink/60">Signed in as {{ auth()->user()->email }}</p>
-        <h1 class="text-2xl font-bold">Dashboard</h1>
+        <h1 class="text-2xl font-bold">My Activity</h1>
     </div>
 
     <section class="mb-10">
@@ -20,7 +20,7 @@
                     @endif
                     <div class="min-w-0 flex-1">
                         <a href="{{ route('posts.show', $post) }}" class="font-semibold hover:underline">{{ $post->title }}</a>
-                        <p class="text-sm text-ink/60">{{ $post->created_at->diffForHumans() }} · {{ $post->comments_count }} comments</p>
+                        <p class="text-sm text-ink/60">{{ $post->isEdited() ? 'edited ' . $post->updated_at->diffForHumans() : $post->created_at->diffForHumans() }} · {{ $post->comments_count }} comments</p>
                     </div>
                     <div class="flex items-center gap-3 text-sm">
                         <x-button variant="secondary" :href="route('posts.edit', $post)">Edit</x-button>

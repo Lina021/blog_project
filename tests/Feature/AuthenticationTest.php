@@ -10,7 +10,7 @@ test('a visitor can register', function () {
         'password_confirmation' => 'password',
     ]);
 
-    $response->assertRedirect(route('dashboard'));
+    $response->assertRedirect(route('my-activity'));
     $this->assertAuthenticated();
     $this->assertDatabaseHas('users', [
         'email' => 'jane@example.com',
@@ -27,7 +27,7 @@ test('a user can log in and log out', function () {
     $this->post('/login', [
         'email' => $user->email,
         'password' => 'password',
-    ])->assertRedirect(route('dashboard'));
+    ])->assertRedirect(route('my-activity'));
 
     $this->assertAuthenticatedAs($user);
 
@@ -53,6 +53,6 @@ test('invalid login credentials are rejected', function () {
     $this->assertGuest();
 });
 
-test('guests cannot access the dashboard', function () {
-    $this->get('/dashboard')->assertRedirect(route('login'));
+test('guests cannot access my activity', function () {
+    $this->get('/my-activity')->assertRedirect(route('login'));
 });

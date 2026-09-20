@@ -11,12 +11,12 @@
 <div class="mb-4">
     <label class="block font-medium mb-1">Title</label>
     <input type="text" name="title" value="{{ old('title', $post->title ?? '') }}"
-           class="w-full border rounded px-3 py-2">
+           class="w-full border rounded px-3 py-2 bg-white">
 </div>
 
 <div class="mb-4">
     <label class="block font-medium mb-1">Body</label>
-    <textarea name="content" rows="8" class="w-full border rounded px-3 py-2">{{ old('content', $post->content ?? '') }}</textarea>
+    <textarea name="content" rows="8" class="w-full border rounded px-3 py-2 bg-white">{{ old('content', $post->content ?? '') }}</textarea>
 </div>
 
 <div class="mb-4">

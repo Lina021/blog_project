@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class DashboardController extends Controller
+class MyActivityController extends Controller
 {
     public function __invoke(Request $request): View
     {
@@ -14,6 +14,6 @@ class DashboardController extends Controller
         $posts = $user->posts()->withCount('comments')->latest()->get();
         $comments = $user->comments()->with('post')->latest()->get();
 
-        return view('dashboard', compact('posts', 'comments'));
+        return view('my-activity', compact('posts', 'comments'));
     }
 }

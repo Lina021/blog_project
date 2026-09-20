@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -16,11 +17,18 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $posts = Post::with('user', 'tags')->latest()->paginate(10);
+        $posts = Post::with('user', 'tags')
+            ->search($request->query('q'))
+            ->withTag($request->query('tag'))
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
-        return view('posts.index', compact('posts'));
+        $tags = Tag::orderBy('name')->get();
+
+        return view('posts.index', compact('posts', 'tags'));
     }
 
     /**

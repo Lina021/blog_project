@@ -9,7 +9,12 @@
         <div class="p-6 sm:p-8">
             <h1 class="text-3xl font-bold mb-2">{{ $post->title }}</h1>
             <p class="text-sm text-ink/60 mb-6">
-                by {{ $post->user->name }} · {{ $post->created_at->format('M j, Y') }}
+                by {{ $post->user->name }} ·
+                @if ($post->isEdited())
+                    Edited {{ $post->updated_at->format('M j, Y') }}
+                @else
+                    {{ $post->created_at->format('M j, Y') }}
+                @endif
             </p>
 
             <div class="mb-6 whitespace-pre-line">{{ $post->content }}</div>

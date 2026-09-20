@@ -10,7 +10,7 @@
             <a href="{{ route('posts.index') }}" class="{{ $link(request()->routeIs('posts.index', 'posts.show')) }}">Posts</a>
             @auth
                 <a href="{{ route('posts.create') }}" class="{{ $link(request()->routeIs('posts.create')) }}">New Post</a>
-                <a href="{{ route('dashboard') }}" class="{{ $link(request()->routeIs('dashboard')) }}">Dashboard</a>
+                <a href="{{ route('my-activity') }}" class="{{ $link(request()->routeIs('my-activity')) }}">My Activity</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="hover:underline">Logout</button>

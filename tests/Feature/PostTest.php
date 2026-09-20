@@ -144,3 +144,43 @@ test('a user cannot delete another users post', function () {
 
     $this->assertDatabaseHas('posts', ['id' => $post->id]);
 });
+
+test('posts can be searched by title, full content or tag name', function () {
+    $byTitle = Post::factory()->create(['title' => 'Alpha guide', 'content' => 'nothing here']);
+    $byContent = Post::factory()->create(['title' => 'Beta', 'content' => str_repeat('word ', 200).'needle at the end']);
+    $byTag = Post::factory()->create(['title' => 'Gamma', 'content' => 'other']);
+    $byTag->tags()->attach(Tag::factory()->create(['name' => 'Laravel']));
+    $other = Post::factory()->create(['title' => 'Delta', 'content' => 'unrelated']);
+
+    $titles = fn (string $term) => $this->get('/posts?q='.urlencode($term))->viewData('posts')->pluck('id')->all();
+
+    expect($titles('Alpha'))->toBe([$byTitle->id])
+        ->and($titles('needle'))->toBe([$byContent->id])
+        ->and($titles('Laravel'))->toBe([$byTag->id])
+        ->and($titles('nomatch'))->toBe([])
+        ->and($titles(''))->toHaveCount(4);
+});
+
+test('posts can be filtered by tag and combined with search', function () {
+    $tag = Tag::factory()->create();
+    $tagged = Post::factory()->create(['title' => 'Tagged one']);
+    $taggedOther = Post::factory()->create(['title' => 'Tagged two']);
+    $untagged = Post::factory()->create(['title' => 'Untagged']);
+    $tagged->tags()->attach($tag);
+    $taggedOther->tags()->attach($tag);
+
+    $ids = fn (string $query) => $this->get('/posts?'.$query)->viewData('posts')->pluck('id')->sort()->values()->all();
+
+    expect($ids("tag={$tag->id}"))->toBe([$tagged->id, $taggedOther->id])
+        ->and($ids("tag={$tag->id}&q=two"))->toBe([$taggedOther->id]);
+});
+
+test('the api posts index supports search and tag filter', function () {
+    $tag = Tag::factory()->create();
+    $match = Post::factory()->create(['title' => 'Findable']);
+    $match->tags()->attach($tag);
+    Post::factory()->create(['title' => 'Other']);
+
+    $this->getJson('/api/posts?q=Findable')->assertOk()->assertJsonCount(1, 'data');
+    $this->getJson("/api/posts?tag={$tag->id}")->assertOk()->assertJsonPath('data.0.id', $match->id);
+});
