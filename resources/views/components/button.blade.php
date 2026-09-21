@@ -2,9 +2,8 @@
 
 @php
     $classes = 'inline-flex items-center rounded px-3 py-1.5 text-sm font-medium transition ' . match ($variant) {
-        'danger' => 'bg-red-600 text-white hover:bg-red-700',
-        'secondary' => 'border border-brand text-brand-dark hover:bg-brand/10',
-        default => 'bg-brand text-white hover:bg-brand-dark',
+        'secondary' => 'border border-ink bg-white text-ink hover:bg-page',
+        default => 'bg-ink text-white hover:bg-brand-dark',
     };
 @endphp
 

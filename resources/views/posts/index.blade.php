@@ -23,9 +23,9 @@
 
     <div class="grid gap-6 md:grid-cols-2">
         @forelse ($posts as $post)
-            <article class="flex flex-col overflow-hidden rounded-lg bg-white shadow-sm">
+            <article class="flex flex-col overflow-hidden rounded-lg border border-brand/20 bg-white shadow-sm">
                 @if ($post->image)
-                    <a href="{{ route('posts.show', $post) }}" class="block h-48 w-full bg-page">
+                    <a href="{{ route('posts.show', $post) }}" class="block h-48 w-full bg-white">
                         <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="h-full w-full object-contain">
                     </a>
                 @endif

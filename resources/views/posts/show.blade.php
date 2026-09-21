@@ -1,7 +1,7 @@
 <x-layouts.layout :title="$post->title">
     <article class="mx-auto max-w-3xl overflow-hidden rounded-lg bg-white shadow-sm">
         @if ($post->image)
-            <div class="aspect-video w-full bg-page">
+            <div class="aspect-video w-full bg-white">
                 <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="h-full w-full object-contain">
             </div>
         @endif

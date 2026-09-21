@@ -6,7 +6,7 @@
     <title>{{ $title ?? 'MyBlog' }}</title>
     @vite('resources/css/app.css')
 </head>
-<body class="bg-page text-ink min-h-screen">
+<body class="min-h-screen bg-white text-ink">
     <x-layouts.nav />
 
     <main class="max-w-5xl mx-auto px-4 py-8">

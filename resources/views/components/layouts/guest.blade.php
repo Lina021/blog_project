@@ -8,7 +8,7 @@
     </head>
     <body class="min-h-screen bg-page text-ink">
         <main class="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
-            <a href="{{ route('posts.index') }}" class="mb-6 text-center text-lg font-bold">The Tech Blog</a>
+            <a href="{{ route('posts.index') }}" class="mb-6 text-center text-2xl font-bold">The Tech Blog</a>
             <section class="w-full rounded-lg bg-white p-8 shadow-sm">
                 {{ $slot }}
             </section>

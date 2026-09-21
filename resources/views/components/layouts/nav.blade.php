@@ -2,7 +2,7 @@
     $link = fn (bool $active) => $active ? 'font-bold' : 'hover:underline';
 @endphp
 
-<nav class="bg-white shadow text-ink">
+<nav class="bg-ink text-white shadow">
     <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
         <a href="{{ route('posts.index') }}" class="font-bold text-lg">The Tech Blog</a>
 
