@@ -31,7 +31,7 @@
                 @endif
                 <div class="flex flex-1 flex-col p-5">
                     <a href="{{ route('posts.show', $post) }}" class="text-lg font-semibold hover:underline">{{ $post->title }}</a>
-                    <p class="mt-1 text-sm text-ink/60">by {{ $post->user->name }} · {{ $post->isEdited() ? 'edited ' . $post->updated_at->diffForHumans() : $post->created_at->diffForHumans() }}</p>
+                    <p class="mt-1 text-sm text-ink/60">by {{ $post->user->name }} · {{ $post->read_time }} · {{ $post->isEdited() ? 'edited ' . $post->updated_at->diffForHumans() : $post->created_at->diffForHumans() }}</p>
                     <p class="mt-2 flex-1">{{ Str::limit($post->content, $post->image ? 150 : 500) }}</p>
 
                     @if ($post->tags->isNotEmpty())
