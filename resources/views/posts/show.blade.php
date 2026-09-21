@@ -9,7 +9,7 @@
         <div class="p-6 sm:p-8">
             <h1 class="text-3xl font-bold mb-2">{{ $post->title }}</h1>
             <p class="text-sm text-ink/60 mb-6">
-                by {{ $post->user->name }} ·
+                by {{ $post->user->name }} · {{ $post->read_time }}
                 @if ($post->isEdited())
                     Edited {{ $post->updated_at->format('M j, Y') }}
                 @else

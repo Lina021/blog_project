@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,17 @@ class Post extends Model
 
     protected $fillable = ['user_id', 'title', 'slug', 'content', 'image'];
 
+    protected function readTime(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $wordCount = str_word_count(strip_tags($this->content));
+                $minutes = ceil($wordCount / 200);
+
+                return $minutes <= 1 ? '1 min read' : "{$minutes} min read";
+            }
+        );
+    }
     /**
      * Match the term against the title, the full content and the tag names.
      */
