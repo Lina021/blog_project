@@ -1,9 +1,6 @@
 <x-layouts.layout title="All Posts">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">Latest Posts</h1>
-        @auth
-            <x-button :href="route('posts.create')">New Post</x-button>
-        @endauth
     </div>
 
     <form method="GET" action="{{ route('posts.index') }}" class="mb-6 flex flex-col gap-3 sm:flex-row">
@@ -21,7 +18,7 @@
         @endif
     </form>
 
-    <div class="grid gap-6 md:grid-cols-2">
+    <div class="grid auto-rows-fr gap-6 md:grid-cols-2">
         @forelse ($posts as $post)
             <article class="flex flex-col overflow-hidden rounded-lg border border-brand/20 bg-white shadow-sm">
                 @if ($post->image)
