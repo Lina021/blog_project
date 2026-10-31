@@ -57,6 +57,23 @@ php artisan queue:work
 
 The queue worker is needed to send comment notification emails. Emails are written to the log (`MAIL_MAILER=log`) by default, so check `storage/logs/laravel.log`.
 
+## Running with Docker
+
+```sh
+git clone https://github.com/Lina021/blog_project.git
+cd blog-project
+
+cp .env.example .env
+composer install
+docker compose up -d --build
+
+docker compose exec laravel.test php artisan key:generate
+docker compose exec laravel.test php artisan migrate --seed
+docker compose exec laravel.test php artisan storage:link
+docker compose exec -u sail laravel.test npm install
+docker compose exec -u sail laravel.test npm run build
+```
+
 ## Web routes
 
 | Method | URL | Description |
